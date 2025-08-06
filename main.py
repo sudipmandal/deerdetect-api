@@ -4,16 +4,21 @@ import requests
 from PIL import Image
 from io import BytesIO
 import torch
+import os
 from transformers import ViTForImageClassification, ViTFeatureExtractor
 app = FastAPI()
 
 class ImageRequest(BaseModel):
     url: str
 
-# Load model and feature extractor
-model = ViTForImageClassification.from_pretrained("samipfjo/deer-detection")
+# Load model and feature extractor from environment variable, if not set use the default samipfjo/deer-detection model
+model_name = os.getenv("HG-VIT-MODEL", "samipfjo/deer-detection")
+
+print(f"Using model: {model_name}")
+model = ViTForImageClassification.from_pretrained(model_name)
+
 model.eval()
-feature_extractor = ViTFeatureExtractor.from_pretrained("samipfjo/deer-detection")
+feature_extractor = ViTFeatureExtractor.from_pretrained(model_name)
 
 @app.post("/detect_deer")
 async def detect_deer(request: ImageRequest):
