@@ -5,7 +5,7 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-ENV HG-VIT-MODEL
+ENV HG-VIT-MODEL=samipfjo/deer-detection
 
 COPY . .
 
